@@ -12,7 +12,7 @@ extern "C" {
 #include "php.h"
 }
 
-PHP_FUNCTION(cv_detect_multicale);
+PHP_FUNCTION(cv_detect_multiscale);
 
 extern zend_module_entry phpcv_module_entry;
 #define phpext_phpcv_ptr &phpcv_module_entry

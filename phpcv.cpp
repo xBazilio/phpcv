@@ -6,12 +6,12 @@
 using namespace cv;
 
 static zend_function_entry phpcv_functions[] = {
-    PHP_FE(cv_detect_multicale, NULL)
+    PHP_FE(cv_detect_multiscale, NULL)
 
     {NULL, NULL, NULL}
 };
 
-PHP_FUNCTION(cv_detect_multicale) {
+PHP_FUNCTION(cv_detect_multiscale) {
     char *imgPath = NULL, *cascadePath = NULL;
     long imgPathLen, cascadePathLen, minNeighbors;
     double scaleFactor, minWidth, minHeight;
