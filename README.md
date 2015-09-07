@@ -3,7 +3,7 @@ PHP extension for face detection
 
 # Installing from sources
 
-    1. Install OpenCV libraries
+    1. Install OpenCV libraries (>=2.3.1)
     2. Unpack phpcv source package
     3. Go to phpcv folder and type "phpize && ./configure && make && make install"
     4. Make sure you have extension=phpcv.so in your php.ini
@@ -34,28 +34,28 @@ $faces = cv_detect_multiscale($img, $cascade, 1.1, 5, [(int)$size[0]/10, (int)$s
 var_export($faces);
 /**
  * will output something like this:
-array (
-  0 =>
-  array (
-    'x' => 313,
-    'y' => 41,
-    'w' => 74,
-    'h' => 74,
-  ),
-  1 =>
-  array (
-    'x' => 121,
-    'y' => 43,
-    'w' => 75,
-    'h' => 75,
-  ),
-  2 =>
-  array (
-    'x' => 470,
-    'y' => 46,
-    'w' => 72,
-    'h' => 72,
-  ),
-)
+ * array (
+ *   0 =>
+ *   array (
+ *     'x' => 313,
+ *     'y' => 41,
+ *     'w' => 74,
+ *     'h' => 74,
+ *   ),
+ *   1 =>
+ *   array (
+ *     'x' => 121,
+ *     'y' => 43,
+ *     'w' => 75,
+ *     'h' => 75,
+ *   ),
+ *   2 =>
+ *   array (
+ *     'x' => 470,
+ *     'y' => 46,
+ *     'w' => 72,
+ *     'h' => 72,
+ *   ),
+ * )
  */
 ```
