@@ -17,11 +17,10 @@ PHP extension for face detection
  * @param string $cascadePath
  * @param double $scaleFactor
  * @param int $minNeighbors
- * @param array $minSize [width, height]
  *
  * @return array
  */
-function cv_detect_multiscale($imgPath, $cascadePath, $scaleFactor, $minNeighbors, $minSize) {
+function cv_detect_multiscale($imgPath, $cascadePath, $scaleFactor, $minNeighbors) {
 }
 ```
 # Usage example
@@ -29,8 +28,7 @@ function cv_detect_multiscale($imgPath, $cascadePath, $scaleFactor, $minNeighbor
 ```php
 $cascade = '/usr/local/share/OpenCV/haarcascades/haarcascade_frontalface_alt2.xml';
 $img = __DIR__ . '/img.jpg';
-$size = getimagesize($img);
-$faces = cv_detect_multiscale($img, $cascade, 1.1, 5, [(int)$size[0]/10, (int)$size[1]/10]);
+$faces = cv_detect_multiscale($img, $cascade, 1.1, 5);
 var_export($faces);
 /**
  * will output something like this:

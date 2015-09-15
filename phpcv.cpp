@@ -2,6 +2,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 using namespace cv;
 
@@ -15,20 +16,10 @@ PHP_FUNCTION(cv_detect_multiscale) {
     char *imgPath = NULL, *cascadePath = NULL;
     long imgPathLen, cascadePathLen, minNeighbors;
     double scaleFactor, minWidth, minHeight;
-    zval *minSize = NULL, **zminWidth, **zminHeight;
 
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssdla", &imgPath, &imgPathLen, &cascadePath, &cascadePathLen, &scaleFactor, &minNeighbors, &minSize) == FAILURE) {
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssdl", &imgPath, &imgPathLen, &cascadePath, &cascadePathLen, &scaleFactor, &minNeighbors) == FAILURE) {
         RETURN_NULL();
     }
-
-    if (zend_hash_index_find(Z_ARRVAL_P(minSize), 0, (void**)&zminWidth) == FAILURE) {
-        RETURN_NULL();
-    }
-    minWidth = Z_DVAL_PP(zminWidth);
-    if (zend_hash_index_find(Z_ARRVAL_P(minSize), 1, (void**)&zminHeight) == FAILURE) {
-        RETURN_NULL();
-    }
-    minHeight = Z_DVAL_PP(zminHeight);
 
     // Read Image
     Mat image;
@@ -36,6 +27,11 @@ PHP_FUNCTION(cv_detect_multiscale) {
     if (image.empty()) {
         RETURN_FALSE;
     }
+    equalizeHist(image, image);
+
+    //min size for detected object, discarding objects smaller than this
+    minWidth = image.size().width / 10;
+    minHeight = image.size().height / 10;
 
     // Load Face cascade (.xml file)
     CascadeClassifier faceCascade;
