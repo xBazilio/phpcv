@@ -6,11 +6,24 @@
 
 using namespace cv;
 
-static zend_function_entry phpcv_functions[] = {
+const zend_function_entry phpcv_functions[] = {
     PHP_FE(cv_detect_multiscale, NULL)
-
-    {NULL, NULL, NULL}
+    PHP_FE_END
 };
+
+PHP_MINIT_FUNCTION(phpcv) {
+    return SUCCESS;
+}
+
+PHP_MSHUTDOWN_FUNCTION(phpcv) {
+    return SUCCESS;
+}
+
+PHP_MINFO_FUNCTION(phpcv) {
+    php_info_print_table_start();
+    php_info_print_table_header(2, "phpcv support", "enabled");
+    php_info_print_table_end();
+}
 
 PHP_FUNCTION(cv_detect_multiscale) {
     char *imgPath = NULL, *cascadePath = NULL;
@@ -18,7 +31,7 @@ PHP_FUNCTION(cv_detect_multiscale) {
     double scaleFactor, minWidth, minHeight;
 
     if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, "ssdl", &imgPath, &imgPathLen, &cascadePath, &cascadePathLen, &scaleFactor, &minNeighbors) == FAILURE) {
-        RETURN_NULL();
+        return;
     }
 
     // Read Image
@@ -48,37 +61,33 @@ PHP_FUNCTION(cv_detect_multiscale) {
     // Build array to return
     for ( int i = 0; i < faces.size(); i++ ) {
         // Now we have: faces[i].x faces[i].y faces[i].width faces[i].height
-        zval *face;
-        ALLOC_INIT_ZVAL(face);
-        array_init(face);
-        add_assoc_long(face, "x", faces[i].x);
-        add_assoc_long(face, "y", faces[i].y);
-        add_assoc_long(face, "w", faces[i].width);
-        add_assoc_long(face, "h", faces[i].height);
+        zval face;
+        array_init(&face);
+        add_assoc_long(&face, "x", faces[i].x);
+        add_assoc_long(&face, "y", faces[i].y);
+        add_assoc_long(&face, "w", faces[i].width);
+        add_assoc_long(&face, "h", faces[i].height);
 
-        add_next_index_zval(return_value, face);
+        add_next_index_zval(return_value, &face);
     }
 }
 
 zend_module_entry phpcv_module_entry = {
-#if ZEND_MODULE_API_NO >= 20010901
     STANDARD_MODULE_HEADER,
-#endif
     PHP_PHPCV_EXTNAME,
     phpcv_functions,
+    PHP_MINIT(phpcv),
+    PHP_MSHUTDOWN(phpcv),
     NULL,
     NULL,
-    NULL,
-    NULL,
-    NULL,
-#if ZEND_MODULE_API_NO >= 20010901
-    PHP_PHPCV_EXTVER,
-#endif
+    PHP_MINFO(phpcv),
+    PHP_PHPCV_VERSION,
     STANDARD_MODULE_PROPERTIES
 };
 
 #ifdef COMPILE_DL_PHPCV
-extern "C" {
+#ifdef ZTS
+ZEND_TSRMLS_CACHE_DEFINE();
+#endif
 ZEND_GET_MODULE(phpcv)
-}
 #endif

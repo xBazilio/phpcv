@@ -1,8 +1,8 @@
 #ifndef PHP_PHPCV_H
 #define PHP_PHPCV_H
 
-#define PHP_PHPCV_EXTNAME  "phpcv"
-#define PHP_PHPCV_EXTVER   "0.1"
+#define PHP_PHPCV_EXTNAME "phpcv"
+#define PHP_PHPCV_VERSION "0.2.0"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -10,6 +10,7 @@
 
 extern "C" {
 #include "php.h"
+#include "ext/standard/info.h"
 }
 
 PHP_FUNCTION(cv_detect_multiscale);
@@ -21,4 +22,8 @@ extern zend_module_entry phpcv_module_entry;
 #include "TSRM.h"
 #endif
 
-#endif /* PHP_PHPCV_H */
+#if defined(ZTS) && defined(COMPILE_DL_PHPCV)
+ZEND_TSRMLS_CACHE_EXTERN();
+#endif
+
+#endif	/* PHP_PHPCV_H */
